@@ -14,13 +14,26 @@ datasource db {
 }
 
 model User {
-  id Int @id @default(autoincrement())
-  name String
-  email String @unique
-  password String
-  telefone String
-  cpf String
-  cnpj String
+  id          String   @id @default(uuid())
+  name        String
+  email       String   @unique
+  password    String
+  telefone    String
+  cpf         String
+  cnpj        String
   companyName String
-  plan String
+  plan        String
+  credits     Float?   @default(0)
+  limit       Float?   @default(100)
+  amountToPay Float?   @default(0)
+  messages    Message[]
+}
+
+model Message {
+  id       String   @id @default(uuid())
+  content  String
+  telefone String
+  type     String
+  userId   String
+  user     User     @relation(fields: [userId], references: [id])
 }

@@ -6,27 +6,28 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { SignInDTO, SignUpDTO } from './dtos/auth';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
+import { SignInDTO, SignUpDTO } from './dtos/auth';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('signup')
-  async signup(@Body() body: SignUpDTO) {
-    return this.authService.signup(body);
+  async signup(@Body() data: SignUpDTO) {
+    return this.authService.signup(data);
   }
 
   @Post('signin')
-  async signin(@Body() body: SignInDTO) {
-    return this.authService.signin(body);
+  async signin(@Body() data: SignInDTO) {
+    return this.authService.signin(data);
   }
 
   @UseGuards(AuthGuard)
   @Get('me')
-  async me(@Request() request) {
-    return request.user;
+  me(@Request() req) {
+    const userId = req.user.id;
+    return this.authService.me(userId);
   }
 }

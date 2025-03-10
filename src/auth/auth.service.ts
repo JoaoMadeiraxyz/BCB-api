@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  BadRequestException,
+} from '@nestjs/common';
 import { SignInDTO, SignUpDTO } from './dtos/auth';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
@@ -13,9 +17,7 @@ export class AuthService {
 
   async signup(data: SignUpDTO) {
     const userAlreadyExists = await this.prismaService.user.findUnique({
-      where: {
-        email: data.email,
-      },
+      where: { email: data.email },
     });
 
     if (userAlreadyExists) {
@@ -23,31 +25,22 @@ export class AuthService {
     }
 
     const hashedPassword = await bcrypt.hash(data.password, 10);
-
     const user = await this.prismaService.user.create({
       data: {
         ...data,
         password: hashedPassword,
+        credits: data.plan === 'pre-pago' ? 0 : undefined,
+        limit: data.plan === 'pos-pago' ? 100 : undefined,
+        amountToPay: data.plan === 'pos-pago' ? 0 : undefined,
       },
     });
 
-    return {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      telefone: user.telefone,
-      cpf: user.cpf,
-      cnpj: user.cnpj,
-      companyName: user.companyName,
-      plan: user.plan,
-    };
+    return { id: user.id, name: user.name, email: user.email, plan: user.plan };
   }
 
   async signin(data: SignInDTO) {
     const user = await this.prismaService.user.findUnique({
-      where: {
-        email: data.email,
-      },
+      where: { email: data.email },
     });
 
     if (!user) {
@@ -71,8 +64,20 @@ export class AuthService {
       plan: user.plan,
     });
 
-    return {
-      accessToken,
-    };
+    return { accessToken };
+  }
+
+  async me(userId: string) {
+    const user = await this.prismaService.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    // Retorna os dados do usuário, excluindo a senha
+    const { password, ...userData } = user;
+    return userData;
   }
 }
