@@ -11,8 +11,8 @@ Este é um projeto utilizando **NestJS** com **PostgreSQL** como banco de dados,
 ### 1. **Clonar o repositório e instalar dependências:**
 
 ```bash
-git clone <URL_DO_REPOSITORIO>
-cd <NOME_DO_REPOSITORIO>
+git clone https://github.com/JoaoMadeiraxyz/BCB-api.git
+cd BCB-api
 npm install
 ```
 
