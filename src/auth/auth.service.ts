@@ -80,4 +80,24 @@ export class AuthService {
     const { password, ...userData } = user;
     return userData;
   }
+
+  async listUsers() {
+    const users = await this.prismaService.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        telefone: true,
+        cpf: true,
+        cnpj: true,
+        companyName: true,
+        plan: true,
+        credits: true,
+        limit: true,
+        amountToPay: true,
+        messages: true,
+      },
+    });
+    return users;
+  }
 }

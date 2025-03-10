@@ -30,4 +30,10 @@ export class AuthController {
     const userId = req.user.id;
     return this.authService.me(userId);
   }
+
+  @UseGuards(AuthGuard)
+  @Get('list-users')
+  async listUsers() {
+    return this.authService.listUsers();
+  }
 }
