@@ -69,11 +69,12 @@ npm run start:dev
 
 ### 🔒 **Autenticação (`/auth`):**
 
-| Método | Endpoint       | Descrição                            |
-| ------ | -------------- | ------------------------------------ |
-| POST   | `/auth/signup` | Cria um novo usuário                 |
-| POST   | `/auth/signin` | Autentica um usuário                 |
-| GET    | `/auth/me`     | Retorna dados do usuário autenticado |
+| Método | Endpoint           | Descrição                              |
+| ------ | ------------------ | -------------------------------------- |
+| POST   | `/auth/signup`     | Cria um novo usuário                   |
+| POST   | `/auth/signin`     | Autentica um usuário                   |
+| GET    | `/auth/me`         | Retorna dados do usuário autenticado   |
+| GET    | `/auth/list-users` | Retorna dados dos usuários cadastrados |
 
 ---
 
