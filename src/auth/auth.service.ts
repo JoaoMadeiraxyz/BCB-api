@@ -70,15 +70,27 @@ export class AuthService {
   async me(userId: string) {
     const user = await this.prismaService.user.findUnique({
       where: { id: userId },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        telefone: true,
+        cpf: true,
+        cnpj: true,
+        companyName: true,
+        plan: true,
+        credits: true,
+        limit: true,
+        amountToPay: true,
+        messages: true,
+      },
     });
 
     if (!user) {
       throw new UnauthorizedException('User not found');
     }
 
-    // Retorna os dados do usuário, excluindo a senha
-    const { password, ...userData } = user;
-    return userData;
+    return user;
   }
 
   async listUsers() {
